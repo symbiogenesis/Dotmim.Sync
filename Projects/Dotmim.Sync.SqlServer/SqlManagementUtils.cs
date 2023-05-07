@@ -741,8 +741,8 @@ namespace Dotmim.Sync.SqlServer
         public static string JoinTwoTablesOnClause(IEnumerable<string> columns, string leftName, string rightName)
         {
             var stringBuilder = new StringBuilder();
-            string strRightName = (string.IsNullOrEmpty(rightName) ? string.Empty : string.Concat(rightName, "."));
-            string strLeftName = (string.IsNullOrEmpty(leftName) ? string.Empty : string.Concat(leftName, "."));
+            string strRightName = string.IsNullOrEmpty(rightName) ? string.Empty : string.Concat(rightName, ".");
+            string strLeftName = string.IsNullOrEmpty(leftName) ? string.Empty : string.Concat(leftName, ".");
 
             string str = "";
             foreach (var column in columns)
@@ -785,7 +785,7 @@ namespace Dotmim.Sync.SqlServer
         public static string CommaSeparatedUpdateFromParameters(SyncTable table, string fromPrefix = "")
         {
             StringBuilder stringBuilder = new StringBuilder();
-            string strFromPrefix = (string.IsNullOrEmpty(fromPrefix) ? string.Empty : string.Concat(fromPrefix, "."));
+            string strFromPrefix = string.IsNullOrEmpty(fromPrefix) ? string.Empty : string.Concat(fromPrefix, ".");
             string strSeparator = "";
             foreach (var mutableColumn in table.GetMutableColumns(false))
             {
