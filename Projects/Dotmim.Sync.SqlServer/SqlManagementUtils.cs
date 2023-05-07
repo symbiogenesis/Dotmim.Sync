@@ -1,7 +1,6 @@
 using Dotmim.Sync.Builders;
 
 using Microsoft.Data.SqlClient;
-using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
@@ -113,7 +112,7 @@ namespace Dotmim.Sync.SqlServer
             var pSchemaName = ParserName.Parse(schemaName);
 
             var name = $"{pTableName.Quoted()}";
-            var sName = String.IsNullOrEmpty(schemaName) ? "[dbo]" : $"{pSchemaName.Quoted()}";
+            var sName = string.IsNullOrEmpty(schemaName) ? "[dbo]" : $"{pSchemaName.Quoted()}";
 
             var command = $"Select * from {sName}.{name};";
 
