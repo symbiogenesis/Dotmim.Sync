@@ -371,7 +371,7 @@ namespace Dotmim.Sync.SqlServer
             {
                 sqlCommand.CommandTimeout = commandTimout;
                 sqlCommand.Parameters.AddWithValue("@procName", procName);
-                sqlCommand.Parameters.AddWithValue("@schemaName", SqlManagementUtils.GetUnquotedSqlSchemaName(ParserName.Parse(quotedProcedureName)));
+                sqlCommand.Parameters.AddWithValue("@schemaName", GetUnquotedSqlSchemaName(ParserName.Parse(quotedProcedureName)));
 
                 bool alreadyOpened = connection.State == ConnectionState.Open;
 
@@ -427,7 +427,7 @@ namespace Dotmim.Sync.SqlServer
             {
                 sqlCommand.CommandTimeout = commandTimeout;
                 sqlCommand.Parameters.AddWithValue("@triggerName", triggerName);
-                sqlCommand.Parameters.AddWithValue("@schemaName", SqlManagementUtils.GetUnquotedSqlSchemaName(ParserName.Parse(quotedTriggerName)));
+                sqlCommand.Parameters.AddWithValue("@schemaName", GetUnquotedSqlSchemaName(ParserName.Parse(quotedTriggerName)));
 
                 bool alreadyOpened = connection.State == ConnectionState.Open;
 
@@ -451,7 +451,7 @@ namespace Dotmim.Sync.SqlServer
             {
                 sqlCommand.CommandTimeout = commandTimeout;
                 sqlCommand.Parameters.AddWithValue("@typeName", typeName);
-                sqlCommand.Parameters.AddWithValue("@schemaName", SqlManagementUtils.GetUnquotedSqlSchemaName(ParserName.Parse(quotedTypeName)));
+                sqlCommand.Parameters.AddWithValue("@schemaName", GetUnquotedSqlSchemaName(ParserName.Parse(quotedTypeName)));
 
                 bool alreadyOpened = connection.State == ConnectionState.Open;
 
@@ -587,7 +587,7 @@ namespace Dotmim.Sync.SqlServer
             using (var sqlCommand = new SqlCommand("IF EXISTS (SELECT * FROM sys.procedures p JOIN sys.schemas s ON s.schema_id = p.schema_id WHERE p.name = @procName AND s.name = @schemaName) SELECT 1 ELSE SELECT 0", connection))
             {
                 sqlCommand.Parameters.AddWithValue("@procName", procedureName);
-                sqlCommand.Parameters.AddWithValue("@schemaName", SqlManagementUtils.GetUnquotedSqlSchemaName(ParserName.Parse(quotedProcedureName)));
+                sqlCommand.Parameters.AddWithValue("@schemaName", GetUnquotedSqlSchemaName(ParserName.Parse(quotedProcedureName)));
 
                 bool alreadyOpened = connection.State == ConnectionState.Open;
 
@@ -692,7 +692,7 @@ namespace Dotmim.Sync.SqlServer
             using (var sqlCommand = new SqlCommand("IF EXISTS (SELECT tr.name FROM sys.triggers tr JOIN sys.tables t ON tr.parent_id = t.object_id JOIN sys.schemas s ON t.schema_id = s.schema_id WHERE tr.name = @triggerName and s.name = @schemaName) SELECT 1 ELSE SELECT 0", connection))
             {
                 sqlCommand.Parameters.AddWithValue("@triggerName", triggerName);
-                sqlCommand.Parameters.AddWithValue("@schemaName", SqlManagementUtils.GetUnquotedSqlSchemaName(ParserName.Parse(quotedTriggerName)));
+                sqlCommand.Parameters.AddWithValue("@schemaName", GetUnquotedSqlSchemaName(ParserName.Parse(quotedTriggerName)));
 
                 bool alreadyOpened = connection.State == ConnectionState.Open;
 
@@ -720,7 +720,7 @@ namespace Dotmim.Sync.SqlServer
             using (SqlCommand sqlCommand = new SqlCommand("IF EXISTS (SELECT * FROM sys.types t JOIN sys.schemas s ON s.schema_id = t.schema_id WHERE t.name = @typeName AND s.name = @schemaName) SELECT 1 ELSE SELECT 0", connection))
             {
                 sqlCommand.Parameters.AddWithValue("@typeName", columnName);
-                sqlCommand.Parameters.AddWithValue("@schemaName", SqlManagementUtils.GetUnquotedSqlSchemaName(ParserName.Parse(quotedTypeName)));
+                sqlCommand.Parameters.AddWithValue("@schemaName", GetUnquotedSqlSchemaName(ParserName.Parse(quotedTypeName)));
 
                 bool alreadyOpened = connection.State == ConnectionState.Open;
 
