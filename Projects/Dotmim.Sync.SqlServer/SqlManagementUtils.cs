@@ -12,6 +12,8 @@ namespace Dotmim.Sync.SqlServer
 {
     public static class SqlManagementUtils
     {
+        const string defaultSchemaName = "dbo";
+
         /// <summary>
         /// Get all Tables
         /// </summary>
@@ -40,7 +42,7 @@ namespace Dotmim.Sync.SqlServer
                     while (reader.Read())
                     {
                         var tableName = reader.GetString(0);
-                        var schemaName = reader.GetString(1) == "dbo" ? null : reader.GetString(1);
+                        var schemaName = reader.GetString(1) == defaultSchemaName ? null : reader.GetString(1);
                         var setupTable = new SetupTable(tableName, schemaName);
                         syncSetup.Tables.Add(setupTable);
                     }
@@ -76,11 +78,11 @@ namespace Dotmim.Sync.SqlServer
             var tableNameNormalized = ParserName.Parse(tableName).Unquoted().Normalized().ToString();
             var tableNameString = ParserName.Parse(tableName).ToString();
 
-            var schemaNameString = "dbo";
+            var schemaNameString = defaultSchemaName;
             if (!string.IsNullOrEmpty(schemaName))
             {
                 schemaNameString = ParserName.Parse(schemaName).ToString();
-                schemaNameString = string.IsNullOrWhiteSpace(schemaNameString) ? "dbo" : schemaNameString;
+                schemaNameString = string.IsNullOrWhiteSpace(schemaNameString) ? defaultSchemaName : schemaNameString;
             }
 
             var syncTable = new SyncTable(tableNameNormalized, schemaNameString);
@@ -112,7 +114,7 @@ namespace Dotmim.Sync.SqlServer
             var pSchemaName = ParserName.Parse(schemaName);
 
             var name = $"{pTableName.Quoted()}";
-            var sName = string.IsNullOrEmpty(schemaName) ? "[dbo]" : $"{pSchemaName.Quoted()}";
+            var sName = string.IsNullOrEmpty(schemaName) ? $"[{defaultSchemaName}]" : $"{pSchemaName.Quoted()}";
 
             var command = $"Select * from {sName}.{name};";
 
@@ -179,11 +181,11 @@ namespace Dotmim.Sync.SqlServer
             var triggerNameNormalized = ParserName.Parse(triggerName).Unquoted().Normalized().ToString();
             var triggerNameString = ParserName.Parse(triggerName).ToString();
 
-            var schemaNameString = "dbo";
+            var schemaNameString = defaultSchemaName;
             if (!string.IsNullOrEmpty(schemaName))
             {
                 schemaNameString = ParserName.Parse(schemaName).ToString();
-                schemaNameString = string.IsNullOrWhiteSpace(schemaNameString) ? "dbo" : schemaNameString;
+                schemaNameString = string.IsNullOrWhiteSpace(schemaNameString) ? defaultSchemaName : schemaNameString;
             }
 
             var syncTable = new SyncTable(triggerNameNormalized, schemaNameString);
@@ -239,11 +241,11 @@ namespace Dotmim.Sync.SqlServer
             var tableNameNormalized = ParserName.Parse(tableName).Unquoted().Normalized().ToString();
             var tableNameString = ParserName.Parse(tableName).ToString();
 
-            var schemaNameString = "dbo";
+            var schemaNameString = defaultSchemaName;
             if (!string.IsNullOrEmpty(schemaName))
             {
                 schemaNameString = ParserName.Parse(schemaName).ToString();
-                schemaNameString = string.IsNullOrWhiteSpace(schemaNameString) ? "dbo" : schemaNameString;
+                schemaNameString = string.IsNullOrWhiteSpace(schemaNameString) ? defaultSchemaName : schemaNameString;
             }
 
             var syncTable = new SyncTable(tableNameNormalized);
@@ -287,11 +289,11 @@ namespace Dotmim.Sync.SqlServer
             var tableNameNormalized = ParserName.Parse(tableName).Unquoted().Normalized().ToString();
             var tableNameString = ParserName.Parse(tableName).ToString();
 
-            var schemaNameString = "dbo";
+            var schemaNameString = defaultSchemaName;
             if (!string.IsNullOrEmpty(schemaName))
             {
                 schemaNameString = ParserName.Parse(schemaName).ToString();
-                schemaNameString = string.IsNullOrWhiteSpace(schemaNameString) ? "dbo" : schemaNameString;
+                schemaNameString = string.IsNullOrWhiteSpace(schemaNameString) ? defaultSchemaName : schemaNameString;
             }
 
             var syncTable = new SyncTable(tableNameNormalized);
@@ -337,8 +339,8 @@ namespace Dotmim.Sync.SqlServer
             var tableNameString = ParserName.Parse(tableName).ToString();
 
             var schemaNameString = ParserName.Parse(schemaName).ToString();
-            // default as dbo
-            schemaNameString = string.IsNullOrEmpty(schemaNameString) ? "dbo" : schemaNameString;
+
+            schemaNameString = string.IsNullOrEmpty(schemaNameString) ? defaultSchemaName : schemaNameString;
 
             var syncTable = new SyncTable(tableNameNormalized, schemaNameString);
 
@@ -390,7 +392,7 @@ namespace Dotmim.Sync.SqlServer
         {
             var pTableName = ParserName.Parse(tableName).Unquoted().ToString();
             var pSchemaName = ParserName.Parse(schemaName).Unquoted().ToString();
-            pSchemaName = string.IsNullOrEmpty(schemaName) ? "dbo" : pSchemaName;
+            pSchemaName = string.IsNullOrEmpty(schemaName) ? defaultSchemaName : pSchemaName;
 
             var quotedTableName = $"{pSchemaName}.{pTableName}";
 
@@ -469,7 +471,7 @@ namespace Dotmim.Sync.SqlServer
         public static string GetUnquotedSqlSchemaName(ParserName parser)
         {
             if (string.IsNullOrEmpty(parser.SchemaName))
-                return "dbo";
+                return defaultSchemaName;
 
             return parser.SchemaName;
         }
@@ -609,7 +611,7 @@ namespace Dotmim.Sync.SqlServer
         {
             var pTableName = ParserName.Parse(tableName).Unquoted().ToString();
             var pSchemaName = ParserName.Parse(schemaName).Unquoted().ToString();
-            pSchemaName = string.IsNullOrEmpty(schemaName) ? "dbo" : pSchemaName;
+            pSchemaName = string.IsNullOrEmpty(schemaName) ? defaultSchemaName : pSchemaName;
 
             using DbCommand dbCommand = connection.CreateCommand();
 
