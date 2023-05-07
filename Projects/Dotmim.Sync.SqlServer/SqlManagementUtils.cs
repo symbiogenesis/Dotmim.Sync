@@ -1,15 +1,12 @@
 using Dotmim.Sync.Builders;
 
+using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
-using Microsoft.Data.SqlClient;
-using System.Data.SqlTypes;
 using System.Globalization;
-using System.Net.Http.Headers;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Dotmim.Sync.SqlServer
