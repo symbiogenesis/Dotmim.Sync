@@ -750,12 +750,12 @@ namespace Dotmim.Sync.SqlServer
             {
                 var quotedColumn = ParserName.Parse(column).Quoted().ToString();
 
-                stringBuilder.Append(str);
-                stringBuilder.Append(strLeftName);
-                stringBuilder.Append(quotedColumn);
-                stringBuilder.Append(" = ");
-                stringBuilder.Append(strRightName);
-                stringBuilder.Append(quotedColumn);
+                stringBuilder.Append(str)
+                             .Append(strLeftName)
+                             .Append(quotedColumn)
+                             .Append(" = ")
+                             .Append(strRightName)
+                             .Append(quotedColumn);
 
                 str = " AND ";
             }
@@ -772,11 +772,12 @@ namespace Dotmim.Sync.SqlServer
                 var quotedColumn = ParserName.Parse(column).Quoted().ToString();
                 var unquotedColumn = ParserName.Parse(column).Unquoted().Normalized().ToString();
 
-                stringBuilder.Append(str1);
-                stringBuilder.Append(strFromPrefix);
-                stringBuilder.Append(quotedColumn);
-                stringBuilder.Append(" = ");
-                stringBuilder.Append($"@{unquotedColumn}");
+                stringBuilder.Append(str1)
+                             .Append(strFromPrefix)
+                             .Append(quotedColumn)
+                             .Append(" = @")
+                             .Append(unquotedColumn);
+
                 str1 = " AND ";
             }
             return stringBuilder.ToString();
@@ -792,7 +793,13 @@ namespace Dotmim.Sync.SqlServer
                 var quotedColumn = ParserName.Parse(mutableColumn).Quoted().ToString();
                 var unquotedColumn = ParserName.Parse(mutableColumn).Unquoted().Normalized().ToString();
 
-                stringBuilder.AppendLine($"{strSeparator} {strFromPrefix}{quotedColumn} = @{unquotedColumn}");
+                stringBuilder.Append(strSeparator)
+                             .Append(' ')
+                             .Append(strFromPrefix)
+                             .Append(quotedColumn)
+                             .Append(" = @")
+                             .AppendLine(unquotedColumn);
+
                 strSeparator = ", ";
             }
             return stringBuilder.ToString();
