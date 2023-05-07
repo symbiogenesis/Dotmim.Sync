@@ -78,12 +78,7 @@ namespace Dotmim.Sync.SqlServer
             var tableNameNormalized = ParserName.Parse(tableName).Unquoted().Normalized().ToString();
             var tableNameString = ParserName.Parse(tableName).ToString();
 
-            var schemaNameString = defaultSchemaName;
-            if (!string.IsNullOrEmpty(schemaName))
-            {
-                schemaNameString = ParserName.Parse(schemaName).ToString();
-                schemaNameString = string.IsNullOrWhiteSpace(schemaNameString) ? defaultSchemaName : schemaNameString;
-            }
+            var schemaNameString = GetSchemaNameOrDefault(schemaName);
 
             var syncTable = new SyncTable(tableNameNormalized, schemaNameString);
 
@@ -181,12 +176,7 @@ namespace Dotmim.Sync.SqlServer
             var triggerNameNormalized = ParserName.Parse(triggerName).Unquoted().Normalized().ToString();
             var triggerNameString = ParserName.Parse(triggerName).ToString();
 
-            var schemaNameString = defaultSchemaName;
-            if (!string.IsNullOrEmpty(schemaName))
-            {
-                schemaNameString = ParserName.Parse(schemaName).ToString();
-                schemaNameString = string.IsNullOrWhiteSpace(schemaNameString) ? defaultSchemaName : schemaNameString;
-            }
+            var schemaNameString = GetSchemaNameOrDefault(schemaName);
 
             var syncTable = new SyncTable(triggerNameNormalized, schemaNameString);
 
@@ -241,12 +231,7 @@ namespace Dotmim.Sync.SqlServer
             var tableNameNormalized = ParserName.Parse(tableName).Unquoted().Normalized().ToString();
             var tableNameString = ParserName.Parse(tableName).ToString();
 
-            var schemaNameString = defaultSchemaName;
-            if (!string.IsNullOrEmpty(schemaName))
-            {
-                schemaNameString = ParserName.Parse(schemaName).ToString();
-                schemaNameString = string.IsNullOrWhiteSpace(schemaNameString) ? defaultSchemaName : schemaNameString;
-            }
+            var schemaNameString = GetSchemaNameOrDefault(schemaName);
 
             var syncTable = new SyncTable(tableNameNormalized);
             using (var sqlCommand = new SqlCommand(commandColumn, connection))
@@ -289,12 +274,7 @@ namespace Dotmim.Sync.SqlServer
             var tableNameNormalized = ParserName.Parse(tableName).Unquoted().Normalized().ToString();
             var tableNameString = ParserName.Parse(tableName).ToString();
 
-            var schemaNameString = defaultSchemaName;
-            if (!string.IsNullOrEmpty(schemaName))
-            {
-                schemaNameString = ParserName.Parse(schemaName).ToString();
-                schemaNameString = string.IsNullOrWhiteSpace(schemaNameString) ? defaultSchemaName : schemaNameString;
-            }
+            var schemaNameString = GetSchemaNameOrDefault(schemaName);
 
             var syncTable = new SyncTable(tableNameNormalized);
             using (var sqlCommand = new SqlCommand(commandColumn, connection))
@@ -338,9 +318,7 @@ namespace Dotmim.Sync.SqlServer
             var tableNameNormalized = ParserName.Parse(tableName).Unquoted().Normalized().ToString();
             var tableNameString = ParserName.Parse(tableName).ToString();
 
-            var schemaNameString = ParserName.Parse(schemaName).ToString();
-
-            schemaNameString = string.IsNullOrEmpty(schemaNameString) ? defaultSchemaName : schemaNameString;
+            var schemaNameString = GetSchemaNameOrDefault(schemaName);
 
             var syncTable = new SyncTable(tableNameNormalized, schemaNameString);
 
@@ -391,8 +369,7 @@ namespace Dotmim.Sync.SqlServer
         public static async Task DropTableIfExistsAsync(string tableName, string schemaName, SqlConnection connection, SqlTransaction transaction)
         {
             var pTableName = ParserName.Parse(tableName).Unquoted().ToString();
-            var pSchemaName = ParserName.Parse(schemaName).Unquoted().ToString();
-            pSchemaName = string.IsNullOrEmpty(schemaName) ? defaultSchemaName : pSchemaName;
+            var pSchemaName = GetSchemaNameOrDefault(schemaName);
 
             var quotedTableName = $"{pSchemaName}.{pTableName}";
 
@@ -804,6 +781,12 @@ namespace Dotmim.Sync.SqlServer
                 strSeparator = ", ";
             }
             return stringBuilder.ToString();
+        }
+
+        private static string GetSchemaNameOrDefault(string schemaName)
+        {
+            var schemaNameString = ParserName.Parse(schemaName).ToString();
+            return string.IsNullOrWhiteSpace(schemaNameString) ? defaultSchemaName : schemaNameString;
         }
     }
 }
