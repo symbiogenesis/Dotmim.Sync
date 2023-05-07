@@ -58,10 +58,8 @@ namespace Dotmim.Sync.SqlServer
                         setupTable.Columns.Add(column["name"].ToString());
                 }
 
-
                 if (!alreadyOpened)
                     connection.Close();
-
             }
             return syncSetup;
         }
@@ -108,11 +106,9 @@ namespace Dotmim.Sync.SqlServer
 
                 if (!alreadyOpened)
                     connection.Close();
-
             }
             return syncTable;
         }
-
 
         public static async Task<SyncTable> GetTableAsync(string tableName, string schemaName, SqlConnection connection, SqlTransaction transaction)
         {
@@ -172,7 +168,6 @@ namespace Dotmim.Sync.SqlServer
                 connection.Close();
         }
 
-
         /// <summary>
         /// Get Table
         /// </summary>
@@ -214,7 +209,6 @@ namespace Dotmim.Sync.SqlServer
 
                 if (!alreadyOpened)
                     connection.Close();
-
             }
             return syncTable;
         }
@@ -224,7 +218,6 @@ namespace Dotmim.Sync.SqlServer
         /// </summary>
         public static async Task<SyncTable> GetColumnsForTableAsync(string tableName, string schemaName, SqlConnection connection, SqlTransaction transaction)
         {
-
             const string commandColumn = """
                                          Select col.name as name,
                                          col.column_id,
@@ -275,7 +268,6 @@ namespace Dotmim.Sync.SqlServer
 
                 if (!alreadyOpened)
                     connection.Close();
-
             }
             return syncTable;
         }
@@ -285,7 +277,6 @@ namespace Dotmim.Sync.SqlServer
         /// </summary>
         public static async Task<SyncTable> GetPrimaryKeysForTableAsync(string tableName, string schemaName, SqlConnection connection, SqlTransaction transaction)
         {
-
             const string commandColumn = """
                                          select ind.name, col.name as columnName, ind_col.column_id, ind_col.key_ordinal 
                                          from sys.indexes ind
@@ -320,21 +311,17 @@ namespace Dotmim.Sync.SqlServer
 
                 sqlCommand.Transaction = transaction;
 
-
                 using (var reader = await sqlCommand.ExecuteReaderAsync().ConfigureAwait(false))
                     syncTable.Load(reader);
 
                 if (!alreadyOpened)
                     connection.Close();
-
-
             }
             return syncTable;
         }
 
         public static async Task<SyncTable> GetRelationsForTableAsync(SqlConnection connection, SqlTransaction transaction, string tableName, string schemaName)
         {
-
             const string commandRelations = """
                                             SELECT f.name AS ForeignKey,
                                                 constraint_column_id as ForeignKeyOrder,
@@ -396,13 +383,10 @@ namespace Dotmim.Sync.SqlServer
 
                 sqlCommand.Transaction = transaction;
 
-
                 await sqlCommand.ExecuteNonQueryAsync().ConfigureAwait(false);
 
                 if (!alreadyOpened)
                     connection.Close();
-
-
             }
         }
 
@@ -455,13 +439,10 @@ namespace Dotmim.Sync.SqlServer
 
                 sqlCommand.Transaction = transaction;
 
-
                 await sqlCommand.ExecuteNonQueryAsync().ConfigureAwait(false);
 
                 if (!alreadyOpened)
                     connection.Close();
-
-
             }
         }
 
@@ -486,11 +467,8 @@ namespace Dotmim.Sync.SqlServer
 
                 if (!alreadyOpened)
                     connection.Close();
-
-
             }
         }
-
 
         public static string GetUnquotedSqlSchemaName(ParserName parser)
         {
@@ -530,9 +508,7 @@ namespace Dotmim.Sync.SqlServer
                     connection.Close();
             }
             return flag;
-
         }
-
 
         public static async Task<(string DatabaseName, string EngineVersion)> GetHelloAsync(SqlConnection connection, SqlTransaction transaction)
         {
@@ -629,8 +605,6 @@ namespace Dotmim.Sync.SqlServer
 
                 if (!alreadyOpened)
                     connection.Close();
-
-
             }
             return flag;
         }
@@ -673,8 +647,6 @@ namespace Dotmim.Sync.SqlServer
             if (!alreadyOpened)
                 connection.Close();
 
-
-
             return tableExist;
         }
 
@@ -687,7 +659,6 @@ namespace Dotmim.Sync.SqlServer
 
             var pSchemaName = ParserName.Parse(schemaName);
             var sName = pSchemaName.Quoted();
-
 
             using DbCommand dbCommand = connection.CreateCommand();
             dbCommand.CommandText = "IF EXISTS (SELECT sch.name FROM sys.schemas sch WHERE sch.name = @schemaName) SELECT 1 ELSE SELECT 0";
@@ -712,7 +683,6 @@ namespace Dotmim.Sync.SqlServer
 
             if (!alreadyOpened)
                 connection.Close();
-
 
             return schemaExist;
         }
@@ -740,8 +710,6 @@ namespace Dotmim.Sync.SqlServer
 
                 if (!alreadyOpened)
                     connection.Close();
-
-
             }
             return triggerExist;
         }
@@ -770,8 +738,6 @@ namespace Dotmim.Sync.SqlServer
 
                 if (!alreadyOpened)
                     connection.Close();
-
-
             }
             return typeExist;
         }
@@ -833,11 +799,6 @@ namespace Dotmim.Sync.SqlServer
                 strSeparator = ", ";
             }
             return stringBuilder.ToString();
-
         }
-
-
-
-
     }
 }
